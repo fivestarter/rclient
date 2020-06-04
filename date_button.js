@@ -2,13 +2,28 @@
 
 const cdb = React.createElement;
 
-function createClock() {
-    return cdb('button', null, new Date().toLocaleTimeString());
+class MyClock extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {date: new Date()};
+    }
+
+    componentDidMount() {
+        this.timerId = setInterval(()=> this.tick(), 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerId);
+    }
+
+    render() {
+        return cdb('button', null, this.state.date.toLocaleTimeString());
+    }
+
+    tick() {
+        this.setState({date: new Date()})
+    }
 }
 
-function renderCdm() {
-    ReactDOM.render(createClock(), document.querySelector('#date_container'));
-}
+ReactDOM.render(cdb(MyClock, null, null), document.querySelector('#date_container'));
 
-renderCdm();
-setInterval(renderCdm, 1000);
